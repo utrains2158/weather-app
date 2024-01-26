@@ -93,7 +93,7 @@ pipeline {
         stage('Building UI') {
             steps {
                 script {
-                    dir("${WORKSPACE}code/ui") {
+                    dir("${WORKSPACE}/code/ui") {
                         sh """
                             cat Dockerfile
                             sudo docker images
@@ -184,14 +184,10 @@ pipeline {
         }
         stage('Clean Up') {
             steps {
-                script {
+               script {
                     dir("${WORKSPACE}/code") {
                         sh """
-                            sudo rm -rf *
-                            #sudo docker rmi $(docker images -q)
-                            #sudo docker-compose down --rmi all
-
-
+                          sudo rm -rf *
                         """
                     }
                 }
