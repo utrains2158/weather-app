@@ -5,7 +5,7 @@ pipeline {
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
-        // skipDefaultCheckout(true)
+        skipDefaultCheckout(true)
         disableConcurrentBuilds()
         timeout (time: 5, unit: 'MINUTES')
         timestamps()
