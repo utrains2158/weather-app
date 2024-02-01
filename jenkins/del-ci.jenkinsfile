@@ -10,7 +10,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         skipDefaultCheckout(true)
         disableConcurrentBuilds()
-        timeout (time: 5, unit: 'MINUTES')
+        timeout (time: 15, unit: 'MINUTES')
         timestamps()
     }
     parameters {
@@ -67,8 +67,7 @@ pipeline {
                 script {
                     dir("${WORKSPACE}/code/auth") {
                         sh """
-                            cat Dockerfile
-                            sudo docker images
+                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/db-a1:${params.AUTH_IMAGE_TAG} .
                         """
                     }
                 }
@@ -131,22 +130,22 @@ pipeline {
                 }
             }
         }
-        stage('Pushing Once into Docker-Hub') {
-            steps {
-                script {
-                    dir("${WORKSPACE}/code") {
-                        sh """
-                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/auth-a1:${params.AUTH_IMAGE_TAG}
-                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/db-a1:${params.DB_IMAGE_TAG}
-                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/redis-a1:${params.REDIS_IMAGE_TAG}
-                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/ui-a1:${params.UI_IMAGE_TAG}
-                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/weather-a1:${params.WEATHER_IMAGE_TAG}
+        // stage('Pushing Once into Docker-Hub') {
+        //     steps {
+        //         script {
+        //             dir("${WORKSPACE}/code") {
+        //                 sh """
+        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/auth-a1:${params.AUTH_IMAGE_TAG}
+        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/db-a1:${params.DB_IMAGE_TAG}
+        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/redis-a1:${params.REDIS_IMAGE_TAG}
+        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/ui-a1:${params.UI_IMAGE_TAG}
+        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/weather-a1:${params.WEATHER_IMAGE_TAG}
                      
-                        """
-                    }
-                }
-            }
-        }
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
         stage('Pushing Auth') {
             steps {
                 script {
