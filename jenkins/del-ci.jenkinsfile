@@ -258,4 +258,25 @@ def sanity_check() {
        echo "The parameter BRANCH_NAME is not set"
        sh 'exit 2'
    } 
+    if (params.UI_IMAGE_TAG.isEmpty()){
+       echo "The parameter UI_IMAGE_TAG is not set"
+       sh 'exit 2'
+   } 
+   if (params.AUTH_IMAGE_TAG.isEmpty()){
+       echo "The parameter AUTH_IMAGE_TAG is not set"
+       sh 'exit 2'
+   }
+   if (params.WEATHER_IMAGE_TAG.isEmpty()){
+       echo "The parameter WEATHER_IMAGE_TAG is not set"
+       sh 'exit 2'
+   }
+   if (params.REDIS_IMAGE_TAG.isEmpty()){
+       echo "The parameter REDIS_IMAGE_TAG is not set"
+       sh 'exit 2'
+   }
+   if (params.DB_IMAGE_TAG.isEmpty()){
+       echo "The parameter DB_IMAGE_TAG is not set"
+       sh 'exit 2'
+   }
+   
 }
