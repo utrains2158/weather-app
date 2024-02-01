@@ -112,8 +112,7 @@ pipeline {
                 script {
                     dir("${WORKSPACE}/code/weather") {
                         sh """
-                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/weather-a1:${params.WEATHER_IMAGE_TAG} .
-                            sudo docker images
+                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/weather-a1:${params.WEATHER_IMAGE_TAG} 
                         """
                     }
                 }
@@ -212,6 +211,7 @@ pipeline {
                           sudo rm -rf *
                           sudo docker rm -f $(docker ps -aq)
                           sudo docker rmi -f $(docker images -aq)
+                          sudo docker images
                         """
                     }
                 }
