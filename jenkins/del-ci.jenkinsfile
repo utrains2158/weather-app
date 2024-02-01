@@ -111,7 +111,7 @@ pipeline {
                 script {
                     dir("${WORKSPACE}/code/weather") {
                         sh """
-                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/weather-a1:${params.WEATHER_IMAGE_TAG} 
+                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/weather-a1:${params.WEATHER_IMAGE_TAG} .
                         """
                     }
                 }
