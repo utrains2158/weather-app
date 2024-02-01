@@ -206,12 +206,12 @@ pipeline {
             steps {
                script {
                     dir("${WORKSPACE}/code") {
-                        sh """
-                          sudo rm -rf /*
+                        sh '''
+                          sudo rm -rf *
                           sudo docker rm -f $(docker ps -aq)
                           sudo docker rmi -f $(docker images -aq)
                           sudo docker images
-                        """
+                        '''
                     }
                 }
             }
