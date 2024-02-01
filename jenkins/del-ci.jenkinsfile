@@ -67,7 +67,7 @@ pipeline {
                 script {
                     dir("${WORKSPACE}/code/auth") {
                         sh """
-                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/db-a1:${params.AUTH_IMAGE_TAG} .
+                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/auth-a1:${params.AUTH_IMAGE_TAG} .
                         """
                     }
                 }
@@ -146,76 +146,76 @@ pipeline {
         //         }
         //     }
         // }
-        // stage('Pushing Auth') {
-        //     steps {
-        //         script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh """
-        //                    sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/auth-a1:${params.AUTH_IMAGE_TAG}
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Pushing DB') {
-        //     steps {
-        //         script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh """
-        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/db-a1:${params.DB_IMAGE_TAG}
+        stage('Pushing Auth') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/code") {
+                        sh """
+                           sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/auth-a1:${params.AUTH_IMAGE_TAG}
+                        """
+                    }
+                }
+            }
+        }
+        stage('Pushing DB') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/code") {
+                        sh """
+                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/db-a1:${params.DB_IMAGE_TAG}
                      
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Pushing Redis') {
-        //     steps {
-        //         script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh """
-        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/redis-a1:${params.REDIS_IMAGE_TAG}
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Pushing UI') {
-        //     steps {
-        //         script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh """
-        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/ui-a1:${params.UI_IMAGE_TAG}
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Pushing Weather') {
-        //     steps {
-        //         script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh """
-        //                     sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/weather-a1:${params.WEATHER_IMAGE_TAG}
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
-        // stage('Clean Up') {
-        //     steps {
-        //        script {
-        //             dir("${WORKSPACE}/code") {
-        //                 sh '''
-        //                   sudo rm -rf *
-        //                   sudo docker rm -f $(docker ps -aq)
-        //                   sudo docker rmi -f $(docker images -aq)
-        //                   sudo docker images
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }
+                        """
+                    }
+                }
+            }
+        }
+        stage('Pushing Redis') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/code") {
+                        sh """
+                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/redis-a1:${params.REDIS_IMAGE_TAG}
+                        """
+                    }
+                }
+            }
+        }
+        stage('Pushing UI') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/code") {
+                        sh """
+                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/ui-a1:${params.UI_IMAGE_TAG}
+                        """
+                    }
+                }
+            }
+        }
+        stage('Pushing Weather') {
+            steps {
+                script {
+                    dir("${WORKSPACE}/code") {
+                        sh """
+                            sudo docker push ${env.DOCKER_HUB_REGISTRY_DEL}/weather-a1:${params.WEATHER_IMAGE_TAG}
+                        """
+                    }
+                }
+            }
+        }
+        stage('Clean Up') {
+            steps {
+               script {
+                    dir("${WORKSPACE}/code") {
+                        sh '''
+                          sudo rm -rf *
+                          sudo docker rm -f $(docker ps -aq)
+                          sudo docker rmi -f $(docker images -aq)
+                          sudo docker images
+                        '''
+                    }
+                }
+            }
+        }
     }
     post {
         success {
