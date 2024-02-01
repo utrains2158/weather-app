@@ -67,7 +67,8 @@ pipeline {
                 script {
                     dir("${WORKSPACE}/code/auth") {
                         sh """
-                            sudo docker build -t ${env.DOCKER_HUB_REGISTRY}/auth-a1:${params.AUTH_IMAGE_TAG} .
+                            cat Dockerfile
+                            sudo docker images
                         """
                     }
                 }
