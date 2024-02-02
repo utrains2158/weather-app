@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('your-aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('your-aws-secret-access-key')
+        AWS_REGION            = 'your-region'
+        ECR_REPO_NAME         = 'samka'
+        ECR_REPO_URL          = ''
+        DOCKERFILE_PATH       = './path/to/your/dockerfile'
+    }
+
+    parameters {
+        string(name: 'IMAGE_TAG', defaultValue: 'latest', description: 'Specify the Docker image tag')
+    }
+
+    stages {
+        stage('AWS Configure') {
+            steps {
+                script {
+                    // Perform AWS configuration
+                    awsConfigure()
+                }
+            }
+        }
+
+        stage('Create ECR Repository') {
+            steps {
+                script {
+                    // Create ECR repository
+                    sh "aws ecr create-repository --repository-name ${ECR_REPO_NAME}"
+                }
+            }
+        }
+
+        stage('ECR Repository URL') {
+            steps {
+                script {
+                    // Retrieve ECR repository URL
+                    ECR_REPO_URL = sh(script: "aws ecr describe-repositories --repository-names ${ECR_REPO_NAME} --query 'repositories[0].repositoryUri' --output text", returnStdout: true).trim()
+                    echo "ECR Repository URL: ${ECR_REPO_URL}"
+                }
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                script {
+                    // Login to AWS ECR
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO_URL}"
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                script {
+                    // Build Docker image
+                    sh "docker build -t ${ECR_REPO_URL}:${params.IMAGE_TAG} ${DOCKERFILE_PATH}"
+                }
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                script {
+                    // Push Docker image to ECR
+                    sh "docker push ${ECR_REPO_URL}:${params.IMAGE_TAG}"
+                }
+            }
+        }
+    }
+}
+
+def awsConfigure() {
+    // Configure AWS CLI
+    sh "aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}"
+    sh "aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}"
+    sh "aws configure set region ${AWS_REGION}"
+}
+
+def credentials(String credentialId) {
+    return credentials(credentialId).toString()
+}
